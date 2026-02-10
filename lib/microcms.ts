@@ -1,10 +1,16 @@
 import { createClient } from 'microcms-js-sdk';
 
 // microCMSクライアントの作成
-export const client = createClient({
-  serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN || '',
-  apiKey: process.env.MICROCMS_API_KEY || '',
-});
+// 環境変数が設定されていない場合はnullを返す
+const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN || '';
+const apiKey = process.env.MICROCMS_API_KEY || '';
+
+export const client = serviceDomain && apiKey 
+  ? createClient({
+      serviceDomain,
+      apiKey,
+    })
+  : null;
 
 // 型定義
 export type Character = {
@@ -63,6 +69,9 @@ export type Community = {
 
 // データ取得関数
 export const getCharacters = async () => {
+  if (!client) {
+    return { contents: [] };
+  }
   try {
     const data = await client.get({
       endpoint: 'characters',
@@ -75,6 +84,9 @@ export const getCharacters = async () => {
 };
 
 export const getCharacter = async (id: string) => {
+  if (!client) {
+    return null;
+  }
   try {
     const data = await client.get({
       endpoint: 'characters',
@@ -88,6 +100,9 @@ export const getCharacter = async (id: string) => {
 };
 
 export const getNews = async () => {
+  if (!client) {
+    return { contents: [] };
+  }
   try {
     const data = await client.get({
       endpoint: 'news',
@@ -100,6 +115,9 @@ export const getNews = async () => {
 };
 
 export const getNewsItem = async (id: string) => {
+  if (!client) {
+    return null;
+  }
   try {
     const data = await client.get({
       endpoint: 'news',
@@ -113,6 +131,9 @@ export const getNewsItem = async (id: string) => {
 };
 
 export const getMedia = async () => {
+  if (!client) {
+    return { contents: [] };
+  }
   try {
     const data = await client.get({
       endpoint: 'media',
@@ -125,6 +146,9 @@ export const getMedia = async () => {
 };
 
 export const getCommunityPosts = async () => {
+  if (!client) {
+    return { contents: [] };
+  }
   try {
     const data = await client.get({
       endpoint: 'community',

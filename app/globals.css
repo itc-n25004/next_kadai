@@ -6,14 +6,16 @@
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 10, 10, 30;
   --background-end-rgb: 20, 20, 50;
+  --gradient-overlay-start: rgba(30, 30, 80, 0.8);
+  --gradient-overlay-end: rgb(20, 20, 50);
 }
 
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
-      rgba(30, 30, 80, 0.8),
-      rgb(var(--background-end-rgb))
+      var(--gradient-overlay-start),
+      var(--gradient-overlay-end)
     )
     rgb(var(--background-start-rgb));
   min-height: 100vh;

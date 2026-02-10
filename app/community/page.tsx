@@ -71,7 +71,12 @@ export default async function CommunityPage() {
                       
                       <div 
                         className="text-gray-400 text-sm line-clamp-3"
-                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
+                        dangerouslySetInnerHTML={{ 
+                          __html: DOMPurify.sanitize(post.content, {
+                            ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'a'],
+                            ALLOWED_ATTR: ['href', 'target', 'rel']
+                          })
+                        }}
                       />
                       
                       <div className="flex items-center justify-between pt-4 border-t border-blue-800/30">

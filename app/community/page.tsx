@@ -1,4 +1,5 @@
 import { getCommunityPosts, Community } from '@/lib/microcms';
+import DOMPurify from 'isomorphic-dompurify';
 
 export const revalidate = 60; // ISR: 60秒ごとに再生成
 
@@ -70,7 +71,7 @@ export default async function CommunityPage() {
                       
                       <div 
                         className="text-gray-400 text-sm line-clamp-3"
-                        dangerouslySetInnerHTML={{ __html: post.content }}
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content) }}
                       />
                       
                       <div className="flex items-center justify-between pt-4 border-t border-blue-800/30">

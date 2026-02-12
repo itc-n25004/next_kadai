@@ -1,0 +1,79 @@
+/* キャラクターページ専用スタイル */
+
+.characters-page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #0c4a6e, #581c87, #312e81);
+}
+
+.characters-main {
+  min-height: calc(100vh - 80px);
+}
+
+.characters-title {
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.characters-subtitle {
+  color: #d1d5db;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.characters-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .characters-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .characters-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.character-card {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.character-card:hover {
+  transform: scale(1.05);
+}
+
+.character-image {
+  aspect-ratio: 3/4;
+  background: linear-gradient(to bottom, #374151, #111827);
+  border-radius: 0.5rem 0.5rem 0 0;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3.75rem;
+}
+
+.character-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.character-element {
+  color: #fbbf24;
+  margin-bottom: 0.5rem;
+}
+
+.character-description {
+  color: #9ca3af;
+  font-size: 0.875rem;
+}

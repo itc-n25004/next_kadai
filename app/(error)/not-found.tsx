@@ -1,6 +1,6 @@
-import Link from 'next/link'
-import ErrorMessage from '@/components/ui/ErrorMessage'
-import Button from '@/components/ui/Button'
+import Link from "next/link";
+import ErrorMessage from "@/components/ui/ErrorMessage";
+import Button from "@/components/ui/Button";
 
 /**
  * 404ページコンポーネント
@@ -25,5 +25,5 @@ export default function NotFound() {
         </Link>
       </div>
     </div>
-  )
+  );
 }

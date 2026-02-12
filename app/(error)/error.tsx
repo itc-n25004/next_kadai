@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
-import ErrorMessage from '@/components/ui/ErrorMessage'
-import Button from '@/components/ui/Button'
+import { useEffect } from "react";
+import ErrorMessage from "@/components/ui/ErrorMessage";
+import Button from "@/components/ui/Button";
 
 /**
  * エラーページコンポーネント
@@ -17,13 +17,13 @@ export default function Error({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
     // エラーをコンソールに記録
-    console.error('Application error:', error)
-  }, [error])
+    console.error("Application error:", error);
+  }, [error]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-900 via-purple-900 to-indigo-950 flex items-center justify-center px-4">
@@ -32,7 +32,7 @@ export default function Error({
           title="予期しないエラーが発生しました"
           message={
             error.message ||
-            'ページの読み込み中に問題が発生しました。もう一度お試しください。'
+            "ページの読み込み中に問題が発生しました。もう一度お試しください。"
           }
           icon="🚨"
           className="mb-6"
@@ -41,11 +41,14 @@ export default function Error({
           <Button variant="primary" onClick={() => reset()}>
             再試行
           </Button>
-          <Button variant="secondary" onClick={() => (window.location.href = '/')}>
+          <Button
+            variant="secondary"
+            onClick={() => (window.location.href = "/")}
+          >
             ホームに戻る
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }

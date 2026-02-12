@@ -1,4 +1,4 @@
-import LoadingSpinner from '@/components/ui/LoadingSpinner'
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
 
 /**
  * ローディングページコンポーネント
@@ -9,10 +9,7 @@ import LoadingSpinner from '@/components/ui/LoadingSpinner'
 export default function Loading() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-900 via-purple-900 to-indigo-950 flex items-center justify-center">
-      <LoadingSpinner
-        size="large"
-        message="原神学園を読み込んでいます..."
-      />
+      <LoadingSpinner size="large" message="原神学園を読み込んでいます..." />
     </div>
-  )
+  );
 }

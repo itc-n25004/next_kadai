@@ -22,7 +22,7 @@ const getNavItems = () => [
   { label: "ホーム", href: "/" },
   { label: "キャラクター", href: "/characters" },
   { label: "ニュース", href: "/news" },
-  { label: "メディア", href: "/media" },
+  { label: "学園紹介", href: "/academy" },
   { label: "コミュニティ", href: "/community" },
 ];
 

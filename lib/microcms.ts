@@ -31,8 +31,15 @@ export type Character = MicroCMSBase & {
 export type NewsItem = MicroCMSBase & {
   title: string;
   date: string;
-  summary: string;
-  icon: string;
+  summary?: string;
+  discription?: string;
+  type?: string;
+  icon?: string;
+  image?: {
+    url: string;
+    height: number;
+    width: number;
+  };
 };
 
 /**

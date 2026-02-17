@@ -40,10 +40,18 @@ export default async function NewsPage() {
               {news.map((item, index) => (
                 <ScrollReveal key={item.id} delay={index * 0.1}>
                   <Card className="news-card">
-                    <div className="news-thumbnail">{item.icon}</div>
+                    <div className="news-thumbnail">
+                      {item.image?.url ? (
+                        <img src={item.image.url} alt={item.title} />
+                      ) : (
+                        <span>{item.icon ?? "📰"}</span>
+                      )}
+                    </div>
                     <p className="news-date">{formatDate(item.date)}</p>
                     <h3 className="news-item-title">{item.title}</h3>
-                    <p className="news-summary">{item.summary}</p>
+                    <p className="news-summary">
+                      {item.summary ?? item.discription ?? ""}
+                    </p>
                   </Card>
                 </ScrollReveal>
               ))}

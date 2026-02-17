@@ -87,12 +87,12 @@ export const client = createClient({
 export const getCharacters = async (): Promise<Character[]> => {
   try {
     const data = await client.get<MicroCMSListResponse<Character>>({
-      endpoint: "characters",
+      endpoint: "gakuen",
     });
-    console.log("取得したキャラクターデータ:", data.contents);
+    console.log("✅ キャラクターデータ取得成功:", data.contents.length, "件");
     return data.contents;
   } catch (error) {
-    console.log("キャラクターデータを取得できませんでした:", error);
+    console.log("❌ キャラクターデータを取得できませんでした:", error);
     return [];
   }
 };
@@ -109,9 +109,10 @@ export const getNews = async (): Promise<NewsItem[]> => {
         orders: "-publishedAt",
       },
     });
+    console.log("✅ ニュースデータ取得成功:", data.contents.length, "件");
     return data.contents;
   } catch (error) {
-    console.log("ニュースデータを取得できませんでした:", error);
+    console.log("❌ ニュースデータを取得できませんでした:", error);
     return [];
   }
 };
@@ -125,9 +126,10 @@ export const getMediaItems = async (): Promise<MediaItem[]> => {
     const data = await client.get<MicroCMSListResponse<MediaItem>>({
       endpoint: "media",
     });
+    console.log("✅ メディアデータ取得成功:", data.contents.length, "件");
     return data.contents;
   } catch (error) {
-    console.log("メディアデータを取得できませんでした:", error);
+    console.log("❌ メディアデータを取得できませんでした:", error);
     return [];
   }
 };
@@ -141,9 +143,14 @@ export const getSocialLinks = async (): Promise<SocialLink[]> => {
     const data = await client.get<MicroCMSListResponse<SocialLink>>({
       endpoint: "social-links",
     });
+    console.log(
+      "✅ ソーシャルリンクデータ取得成功:",
+      data.contents.length,
+      "件",
+    );
     return data.contents;
   } catch (error) {
-    console.log("ソーシャルリンクデータを取得できませんでした:", error);
+    console.log("❌ ソーシャルリンクデータを取得できませんでした:", error);
     return [];
   }
 };

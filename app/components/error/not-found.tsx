@@ -1,6 +1,6 @@
 import Link from "next/link";
-import ErrorMessage from "@/components/ui/ErrorMessage";
-import Button from "@/components/ui/Button";
+import ErrorMessage from "../ui/ErrorMessage";
+import Button from "../ui/Button";
 
 /**
  * 404ページコンポーネント

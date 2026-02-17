@@ -1,18 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { MediaItem } from "@/lib/microcms";
 
-const mediaData = {
-  videos: [
-    { icon: "🎬", title: "学園紹介PV" },
-    { icon: "🎥", title: "文化祭ダイジェスト" },
-    { icon: "📹", title: "部活動紹介" },
-  ],
-  images: [
-    { icon: "🎨", title: "キャラクターアート" },
-    { icon: "🖼️", title: "学園の四季" },
-    { icon: "📸", title: "イベントギャラリー" },
-  ],
+type MediaSectionProps = {
+  mediaItems: MediaItem[];
 };
 
 /**
@@ -20,10 +12,12 @@ const mediaData = {
  * 動画とイラストのコンテンツを切り替え表示
  * @returns {JSX.Element} メディアセクション
  */
-export default function MediaSection() {
+export default function MediaSection({ mediaItems }: MediaSectionProps) {
   const [activeTab, setActiveTab] = useState<"videos" | "images">("videos");
 
-  const content = mediaData[activeTab];
+  const videos = mediaItems.filter((item) => item.type === "videos");
+  const images = mediaItems.filter((item) => item.type === "images");
+  const content = activeTab === "videos" ? videos : images;
 
   return (
     <section id="media" className="py-20 px-4">
@@ -58,8 +52,8 @@ export default function MediaSection() {
 
         {/* メディアコンテンツグリッド */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {content.map((item, index) => (
-            <div key={index}>
+          {content.map((item) => (
+            <div key={item.id}>
               <div className="aspect-video bg-gradient-to-br from-indigo-600 to-purple-700 rounded-lg flex items-center justify-center text-5xl hover:scale-105 transition-transform duration-300 cursor-pointer">
                 {item.icon}
               </div>

@@ -1,14 +1,14 @@
-import { type ReactNode } from 'react'
+import { type ReactNode } from "react";
 
 /**
  * エラーメッセージコンポーネントのプロパティ型定義
  */
 type ErrorMessageProps = {
-  title?: string
-  message: string
-  icon?: ReactNode
-  className?: string
-}
+  title?: string;
+  message: string;
+  icon?: ReactNode;
+  className?: string;
+};
 
 /**
  * エラーメッセージコンポーネント
@@ -17,10 +17,10 @@ type ErrorMessageProps = {
  * @returns {JSX.Element} エラーメッセージ要素
  */
 export default function ErrorMessage({
-  title = 'エラーが発生しました',
+  title = "エラーが発生しました",
   message,
-  icon = '⚠️',
-  className = '',
+  icon = "⚠️",
+  className = "",
 }: ErrorMessageProps) {
   return (
     <div
@@ -31,5 +31,5 @@ export default function ErrorMessage({
       <h3 className="text-xl font-bold text-red-400 mb-2">{title}</h3>
       <p className="text-gray-300">{message}</p>
     </div>
-  )
+  );
 }

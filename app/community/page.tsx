@@ -1,21 +1,21 @@
-import { getSocialLinks } from '@/lib/microcms'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
-import ScrollReveal from '@/components/ui/ScrollReveal'
-import Button from '@/components/ui/Button'
-import EmptyState from '@/components/ui/EmptyState'
-import './styles.css'
+import { getSocialLinks } from "@/lib/microcms";
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
+import ScrollReveal from "../components/ui/ScrollReveal";
+import EmptyState from "../components/ui/EmptyState";
+import Button from "../components/ui/Button";
+import "./styles.css";
 
 /**
  * コミュニティページ
  */
 export default async function CommunityPage() {
-  const socialLinks = await getSocialLinks()
+  const socialLinks = await getSocialLinks();
 
   return (
     <div className="community-page">
       <Header />
-      
+
       <main className="community-main">
         <div className="container mx-auto px-4 py-24">
           <ScrollReveal>
@@ -29,9 +29,9 @@ export default async function CommunityPage() {
             <div className="community-links">
               {socialLinks.map((link, index) => (
                 <ScrollReveal key={link.id} delay={index * 0.1}>
-                  <a 
-                    href={link.url} 
-                    target="_blank" 
+                  <a
+                    href={link.url}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="community-link-wrapper"
                   >
@@ -52,11 +52,7 @@ export default async function CommunityPage() {
               title="コミュニティリンクがありません"
               message="現在、登録されているコミュニティリンクはありません。"
               icon="🌐"
-              action={
-                <Button variant="primary" onClick={() => window.location.reload()}>
-                  再読み込み
-                </Button>
-              }
+              showReloadButton={true}
             />
           )}
         </div>
@@ -64,7 +60,7 @@ export default async function CommunityPage() {
 
       <Footer />
     </div>
-  )
+  );
 }
 
-export const revalidate = 60
+export const revalidate = 60;

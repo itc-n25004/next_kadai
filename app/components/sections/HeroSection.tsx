@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import Button from "./ui/Button";
+import { useState, useEffect } from "react";
+import Button from "../ui/Button";
 
 /**
  * 純粋関数: ランダムなパーティクルの初期位置を生成
@@ -26,8 +26,14 @@ const generateParticles = (
  * @returns {JSX.Element} ヒーローセクション
  */
 export default function HeroSection() {
-  // パーティクルは初回レンダリング時のみ生成
-  const [particles] = useState(() => generateParticles(30));
+  // パーティクルはクライアントサイドでのみ生成（Hydration対策）
+  const [particles, setParticles] = useState<
+    Array<{ id: number; x: number; y: number; delay: number }>
+  >([]);
+
+  useEffect(() => {
+    setParticles(generateParticles(30));
+  }, []);
 
   return (
     <section

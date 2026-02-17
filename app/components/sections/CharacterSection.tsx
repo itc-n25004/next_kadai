@@ -1,11 +1,11 @@
-"use client";
+import { Character } from "@/lib/microcms";
 
 /**
  * 純粋関数: 元素に応じたボーダーカラーのクラス名を生成
- * @param {string} element - 元素名（炎、水、雷など）
+ * @param {string} elements - 元素名（炎、水、雷など）
  * @returns {string} ホバー時のボーダーカラークラス
  */
-const getCharacterCardClass = (element: string): string => {
+const getCharacterCardClass = (elements: string): string => {
   const elementColors: Record<string, string> = {
     炎: "hover:border-red-500",
     水: "hover:border-blue-500",
@@ -15,15 +15,15 @@ const getCharacterCardClass = (element: string): string => {
     氷: "hover:border-cyan-400",
     草: "hover:border-green-500",
   };
-  return elementColors[element] || "hover:border-white";
+  return elementColors[elements] || "hover:border-white";
 };
 
 /**
  * 純粋関数: 元素に対応するアイコン絵文字を返す
- * @param {string} element - 元素名
+ * @param {string} elements - 元素名
  * @returns {string} 元素のアイコン絵文字
  */
-const getElementIcon = (element: string): string => {
+const getElementIcon = (elements: string): string => {
   const icons: Record<string, string> = {
     炎: "🔥",
     水: "💧",
@@ -33,42 +33,21 @@ const getElementIcon = (element: string): string => {
     氷: "❄️",
     草: "🌿",
   };
-  return icons[element] || "✨";
+  return icons[elements] || "✨";
 };
 
-const dummyCharacters = [
-  {
-    id: 1,
-    name: "楓原万葉",
-    element: "風",
-    description: "文芸部所属。詩を愛する自由な精神の持ち主",
-  },
-  {
-    id: 2,
-    name: "胡桃",
-    element: "炎",
-    description: "演劇部部長。いたずら好きで元気いっぱい",
-  },
-  {
-    id: 3,
-    name: "神里綾華",
-    element: "氷",
-    description: "生徒会長。優雅で礼儀正しい模範的生徒",
-  },
-  {
-    id: 4,
-    name: "雷電将軍",
-    element: "雷",
-    description: "剣道部主将。圧倒的な実力を持つ",
-  },
-];
+type CharacterSectionProps = {
+  characters: Character[];
+};
 
 /**
  * キャラクターセクションコンポーネント
  * キャラクターカードを表示
  * @returns {JSX.Element} キャラクターセクション
  */
-export default function CharacterSection() {
+export default function CharacterSection({
+  characters,
+}: CharacterSectionProps) {
   return (
     <section id="characters" className="py-20 px-4">
       <div className="container mx-auto">
@@ -82,21 +61,31 @@ export default function CharacterSection() {
 
         {/* キャラクターカードのグリッド */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {dummyCharacters.map((character) => (
+          {characters.map((character) => (
             <div
               key={character.id}
-              className={`bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 transition-all duration-300 ${getCharacterCardClass(character.element)} cursor-pointer transform hover:scale-105`}
+              className={`bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 transition-all duration-300 ${getCharacterCardClass(character.elements)} cursor-pointer transform hover:scale-105`}
             >
-              {/* キャラクター画像エリア */}
-              <div className="aspect-[3/4] bg-gradient-to-b from-gray-700 to-gray-900 rounded-t-lg mb-4 flex items-center justify-center text-6xl">
-                {getElementIcon(character.element)}
-              </div>
+              {/* キャラクター画像 */}
+              {character.image && (
+                <img
+                  src={character.image.url}
+                  alt={character.character}
+                  className="aspect-[3/4] object-cover rounded-t-lg mb-4"
+                />
+              )}
+              {/* 画像がない場合のフォールバック */}
+              {!character.image && (
+                <div className="aspect-[3/4] bg-gradient-to-b from-gray-700 to-gray-900 rounded-t-lg mb-4 flex items-center justify-center text-6xl">
+                  {getElementIcon(character.elements)}
+                </div>
+              )}
               {/* キャラクター情報 */}
               <h3 className="text-2xl font-bold text-white mb-2">
-                {character.name}
+                {character.character}
               </h3>
-              <p className="text-yellow-400 mb-2">{character.element} 元素</p>
-              <p className="text-gray-400 text-sm">{character.description}</p>
+              <p className="text-yellow-400 mb-2">{character.elements} 元素</p>
+              <p className="text-gray-400 text-sm">{character.country}</p>
             </div>
           ))}
         </div>

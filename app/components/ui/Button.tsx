@@ -1,3 +1,5 @@
+"use client";
+
 import { type ReactNode } from "react";
 
 /**
@@ -54,10 +56,12 @@ export default function Button({
 }: ButtonProps) {
   const variantClass = getButtonVariantClass(variant);
   const sizeClass = getButtonSizeClass(size);
-  const buttonClass = `${variantClass} ${sizeClass} ${className} rounded-lg font-semibold transition-all duration-300 transform hover:scale-105`;
 
   return (
-    <button className={buttonClass} onClick={onClick}>
+    <button
+      onClick={onClick}
+      className={`rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 ${variantClass} ${sizeClass} ${className}`}
+    >
       {children}
     </button>
   );

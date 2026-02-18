@@ -23,6 +23,35 @@
   margin-bottom: 3rem;
 }
 
+/* 国ごとのセクション */
+.countries-container {
+  margin-top: 2rem;
+}
+
+.country-section {
+  background: rgba(0, 0, 0, 0.3);
+  border-left: 4px solid #8b5cf6;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.country-header {
+  margin-bottom: 2rem;
+}
+
+.country-emblem {
+  flex-shrink: 0;
+}
+
+.country-title {
+  background: linear-gradient(to right, #fbbf24, #fca5a5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
 .characters-grid {
   display: grid;
   grid-template-columns: 1fr;

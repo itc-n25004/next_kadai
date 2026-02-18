@@ -12,12 +12,24 @@ type MicroCMSBase = {
 };
 
 /**
+ * 国型定義（microCMSスキーマに対応）
+ */
+export type Country = MicroCMSBase & {
+  title: string;
+  image: {
+    url: string;
+    height: number;
+    width: number;
+  };
+};
+
+/**
  * キャラクター型定義（microCMSスキーマに対応）
  */
 export type Character = MicroCMSBase & {
   character: string;
   elements: string;
-  country: string;
+  country: string; // 国はIDのみの文字列か、国オブジェクトのどちらか
   image: {
     url: string;
     height: number;
@@ -86,6 +98,23 @@ export const client = createClient({
   serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN,
   apiKey: process.env.MICROCMS_API_KEY,
 });
+
+/**
+ * 国一覧を取得
+ * @returns {Promise<Country[]>} 国配列
+ */
+export const getCountries = async (): Promise<Country[]> => {
+  try {
+    const data = await client.get<MicroCMSListResponse<Country>>({
+      endpoint: "country",
+    });
+    console.log("✅ 国データ取得成功:", data.contents.length, "件");
+    return data.contents;
+  } catch (error) {
+    console.log("❌ 国データを取得できませんでした:", error);
+    return [];
+  }
+};
 
 /**
  * キャラクター一覧を取得

@@ -4,6 +4,7 @@ import {
   getCharacters,
   getCountries,
 } from "@/lib/microcms";
+import { COUNTRY_ORDER } from "@/lib/constants";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import ScrollReveal from "../components/ui/ScrollReveal";
@@ -60,15 +61,15 @@ const groupCharactersByCountry = (
   const grouped = new Map<string, CharacterWithCountry[]>();
 
   characters.forEach((character) => {
-    const countryId = character.country as string;
-    if (!countryId || !character.countryInfo) {
+    const countryTitle = character.countryInfo?.title?.trim();
+    if (!countryTitle) {
       return;
     }
 
-    if (!grouped.has(countryId)) {
-      grouped.set(countryId, []);
+    if (!grouped.has(countryTitle)) {
+      grouped.set(countryTitle, []);
     }
-    grouped.get(countryId)!.push(character);
+    grouped.get(countryTitle)!.push(character);
   });
 
   return grouped;
@@ -83,25 +84,16 @@ export default async function CharactersPage() {
     getCountries(),
   ]);
 
-  // 国の表示順序を定義
-  const countryOrder = [
-    "モンド",
-    "璃月",
-    "稲妻",
-    "スメール",
-    "フォンテーヌ",
-    "ナタ",
-    "ナドクライ",
-  ];
-
   // 国情報をマップ化（titleをキーにする）
-  const countryMap = new Map(countries.map((c) => [c.title, c]));
+  const countryMap = new Map(countries.map((c) => [c.title.trim(), c]));
 
   // キャラクターに国情報を統合
   const charactersWithCountry: CharacterWithCountry[] = characters.map(
     (character) => ({
       ...character,
-      countryInfo: countryMap.get(character.country as string),
+      countryInfo: countryMap.get(
+        (character.country as string)?.trim?.() || "",
+      ),
     }),
   );
 
@@ -128,16 +120,14 @@ export default async function CharactersPage() {
   );
 
   // 国の順序に従ってソート
-  const sortedCountries = countryOrder
-    .map((countryName) => {
-      const chars = groupedCharacters.get(countryName);
-      return chars
-        ? ([countryName, chars] as [string, CharacterWithCountry[]])
-        : null;
-    })
-    .filter(
-      (entry): entry is [string, CharacterWithCountry[]] => entry !== null,
-    );
+  const sortedCountries = COUNTRY_ORDER.map((countryName) => {
+    const chars = groupedCharacters.get(countryName.trim());
+    return chars
+      ? ([countryName, chars] as [string, CharacterWithCountry[]])
+      : null;
+  }).filter(
+    (entry): entry is [string, CharacterWithCountry[]] => entry !== null,
+  );
 
   console.log("📊 ソート後の国数:", sortedCountries.length);
 
@@ -166,10 +156,10 @@ export default async function CharactersPage() {
                     <ScrollReveal key={countryName} delay={countryIndex * 0.1}>
                       <section className="country-section mb-16">
                         <div className="country-header flex items-center gap-6 mb-8">
-                          {countryInfo.image && (
+                          {countryInfo.co_image && (
                             <div className="country-emblem">
                               <img
-                                src={countryInfo.image.url}
+                                src={countryInfo.co_image.url}
                                 alt={countryInfo.title}
                                 className="w-24 h-24 object-cover rounded-lg shadow-lg"
                               />

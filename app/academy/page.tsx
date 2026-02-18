@@ -1,128 +1,116 @@
 import Link from "next/link";
+import { COUNTRY_ORDER } from "@/lib/constants";
+import { getCountries, type Country } from "@/lib/microcms";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import ScrollReveal from "../components/ui/ScrollReveal";
 import "./styles.css";
 
-const highlights = [
-  {
-    title: "七元素の専門科目",
-    description: "元素別の研究と実技を横断的に学ぶ実践型カリキュラム。",
-  },
-  {
-    title: "少人数ラボ",
-    description: "指導教員と近い距離で取り組む研究演習。",
-  },
-  {
-    title: "学園共同プロジェクト",
-    description: "学年を超えた共同制作で実戦力を磨く。",
-  },
-];
-
-const facilities = [
-  { name: "元素実験棟", detail: "安全設計の実験室と検証設備" },
-  { name: "図書回廊", detail: "古文書から最新論文まで揃う" },
-  { name: "演武ホール", detail: "剣術・弓術・武術の稽古場" },
-  { name: "創作アトリエ", detail: "芸術とクラフトの制作空間" },
-];
-
-const dayFlow = [
-  { time: "08:30", label: "登校 / 朝の集い" },
-  { time: "10:00", label: "専門講義 / 実技" },
-  { time: "12:30", label: "学園ランチ" },
-  { time: "14:00", label: "ラボ / 研究演習" },
-  { time: "16:30", label: "部活動 / プロジェクト" },
-  { time: "18:00", label: "下校 / 自主学習" },
-];
-
 /**
- * 学園紹介ページ
+ * 学園紹介ページ - フルスクリーンデザイン
  */
-export default function AcademyPage() {
+export default async function AcademyPage() {
+  const countries = await getCountries();
+
+  // COUNTRY_ORDERに従って国を並べ替える（ソートしない）
+  const countryMap = new Map(countries.map((c) => [c.title.trim(), c]));
+
+  // デバッグ情報
+  console.log("🔍 COUNTRY_ORDER:", COUNTRY_ORDER);
+  console.log(
+    "🔍 microCMS countries.title:",
+    countries.map((c) => c.title),
+  );
+  console.log("🔍 countryMap keys:", Array.from(countryMap.keys()));
+
+  const sortedCountries = COUNTRY_ORDER.map((countryName) => {
+    const match = countryMap.get(countryName.trim());
+    console.log(
+      `🔍 COUNTRY_ORDER 「${countryName}」-> countryMap で 「${countryName.trim()}」を検索 -> ${match ? "✅ 見つかった" : "❌ 見つかりません"}`,
+    );
+    return match;
+  }).filter((country): country is Country => country !== undefined);
+
   return (
     <div className="academy-page">
       <Header />
 
       <main className="academy-main">
-        <section className="academy-hero">
-          <div className="academy-hero-inner">
+        {/* ヒーローセクション */}
+        <section className="fullscreen-hero">
+          <div className="hero-overlay"></div>
+          <div className="hero-content">
             <ScrollReveal>
-              <p className="academy-eyebrow">Academy Overview</p>
-              <h1 className="academy-title">学園紹介</h1>
-              <p className="academy-subtitle">
-                七つの元素が交差する学び舎。知性と実践の両輪で、
-                次代を切り拓く力を育てます。
+              <p className="hero-subtitle">Education Beyond Elements</p>
+              <h1 className="hero-title">学園紹介</h1>
+              <p className="hero-description">
+                五つの専門学府が織りなす、究極の学びの世界へようこそ。
+                <br />
+                それぞれの道を極め、未来を切り拓く力を手に入れよう。
               </p>
-              <div className="academy-cta">
-                <Link href="/characters" className="academy-button primary">
-                  生徒たちを見る
-                </Link>
-                <Link href="/community" className="academy-button ghost">
-                  学園コミュニティへ
-                </Link>
+              <div className="hero-scroll-hint">
+                <span>▼ Scroll to explore</span>
               </div>
             </ScrollReveal>
           </div>
         </section>
 
-        <section className="academy-section">
-          <div className="academy-container">
-            <ScrollReveal>
-              <h2 className="academy-section-title">学園の理念</h2>
-              <p className="academy-section-lead">
-                研究・実技・創造の三領域を連携し、学びを現場で活かす。
-                個の探求心と共同体の知恵を重ね、未来の担い手を育成します。
-              </p>
-            </ScrollReveal>
+        {/* 各学校のフルスクリーンセクション */}
+        {sortedCountries.length > 0 ? (
+          sortedCountries.map((country, index) => (
+            <section
+              key={country.id}
+              className={`school-section${country.ac_image ? " has-image" : ""}`}
+              style={
+                country.ac_image
+                  ? { backgroundImage: `url(${country.ac_image.url})` }
+                  : undefined
+              }
+            >
+              <div className="school-overlay"></div>
+              <div className="school-content">
+                <ScrollReveal>
+                  <div className="school-number">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
+                  <p className="school-subtitle">Academy Country</p>
+                  <h2 className="school-title">{country.title}</h2>
+                  {country.co_image && (
+                    <div className="school-emblem">
+                      <img
+                        src={country.co_image.url}
+                        alt={country.title}
+                        className="school-emblem-image"
+                      />
+                    </div>
+                  )}
+                  <p className="school-description">
+                    {country.discription || "学園の詳細は準備中です。"}
+                  </p>
 
-            <div className="academy-grid">
-              {highlights.map((item) => (
-                <div key={item.title} className="academy-card">
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+                  <Link href="/characters" className="school-cta">
+                    在籍生徒を見る →
+                  </Link>
+                </ScrollReveal>
+              </div>
 
-        <section className="academy-section alt">
-          <div className="academy-container">
-            <ScrollReveal>
-              <h2 className="academy-section-title">施設紹介</h2>
-              <p className="academy-section-lead">
-                学びを支える設備と、創造を広げる空間。
-              </p>
-            </ScrollReveal>
-            <div className="academy-facilities">
-              {facilities.map((facility) => (
-                <div key={facility.name} className="academy-facility">
-                  <div className="academy-facility-title">{facility.name}</div>
-                  <p>{facility.detail}</p>
-                </div>
-              ))}
+              {/* 装飾的な背景パターン */}
+              <div className="school-pattern"></div>
+            </section>
+          ))
+        ) : (
+          <section className="school-section">
+            <div className="school-overlay"></div>
+            <div className="school-content">
+              <ScrollReveal>
+                <h2 className="school-title">学園情報を取得できませんでした</h2>
+                <p className="school-description">
+                  しばらくしてから再度お試しください。
+                </p>
+              </ScrollReveal>
             </div>
-          </div>
-        </section>
-
-        <section className="academy-section">
-          <div className="academy-container">
-            <ScrollReveal>
-              <h2 className="academy-section-title">1日の流れ</h2>
-              <p className="academy-section-lead">
-                講義と実技、研究と部活動がバランスよく配置された一日。
-              </p>
-            </ScrollReveal>
-            <div className="academy-timeline">
-              {dayFlow.map((slot) => (
-                <div key={slot.time} className="academy-timeline-item">
-                  <span className="academy-time">{slot.time}</span>
-                  <span className="academy-activity">{slot.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
 
       <Footer />

@@ -16,11 +16,17 @@ type MicroCMSBase = {
  */
 export type Country = MicroCMSBase & {
   title: string;
-  image: {
+  co_image?: {
     url: string;
     height: number;
     width: number;
   };
+  ac_image?: {
+    url: string;
+    height: number;
+    width: number;
+  };
+  discription?: string;
 };
 
 /**
@@ -109,6 +115,15 @@ export const getCountries = async (): Promise<Country[]> => {
       endpoint: "country",
     });
     console.log("✅ 国データ取得成功:", data.contents.length, "件");
+    if (data.contents[0]) {
+      const sample = data.contents[0];
+      console.log("📦 国データサンプル:", {
+        title: sample.title,
+        co_image: sample.co_image?.url,
+        ac_image: sample.ac_image?.url,
+        discription: sample.discription,
+      });
+    }
     return data.contents;
   } catch (error) {
     console.log("❌ 国データを取得できませんでした:", error);

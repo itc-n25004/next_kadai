@@ -41,6 +41,11 @@ export type Character = MicroCMSBase & {
     height: number;
     width: number;
   };
+  character_sprite?: {
+    url: string;
+    height: number;
+    width: number;
+  };
 };
 
 /**
@@ -139,8 +144,21 @@ export const getCharacters = async (): Promise<Character[]> => {
   try {
     const data = await client.get<MicroCMSListResponse<Character>>({
       endpoint: "gakuen",
+      queries: {
+        limit: 100,
+      },
     });
     console.log("✅ キャラクターデータ取得成功:", data.contents.length, "件");
+    if (data.contents[0]) {
+      const sample = data.contents[0];
+      console.log("📦 キャラクターデータサンプル:", {
+        character: sample.character,
+        elements: sample.elements,
+        country: sample.country,
+        image: sample.image?.url,
+        character_sprite: sample.character_sprite?.url,
+      });
+    }
     return data.contents;
   } catch (error) {
     console.log("❌ キャラクターデータを取得できませんでした:", error);

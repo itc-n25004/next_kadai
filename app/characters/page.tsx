@@ -180,7 +180,12 @@ export default async function CharactersPage() {
                                 className={`character-card ${getCharacterCardClass(character.elements)}`}
                               >
                                 <div className="character-image">
-                                  {character.image ? (
+                                  {character.character_sprite ? (
+                                    <img
+                                      src={character.character_sprite.url}
+                                      alt={character.character}
+                                    />
+                                  ) : character.image ? (
                                     <img
                                       src={character.image.url}
                                       alt={character.character}

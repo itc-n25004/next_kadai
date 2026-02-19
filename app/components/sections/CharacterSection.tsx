@@ -67,7 +67,15 @@ export default function CharacterSection({
               className={`bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 transition-all duration-300 ${getCharacterCardClass(character.elements)} cursor-pointer transform hover:scale-105`}
             >
               {/* キャラクター画像 */}
-              {character.image && (
+              {character.character_sprite && (
+                <img
+                  src={character.character_sprite.url}
+                  alt={character.character}
+                  className="aspect-[3/4] object-cover rounded-t-lg mb-4"
+                />
+              )}
+              {/* キャラクター通常画像 */}
+              {!character.character_sprite && character.image && (
                 <img
                   src={character.image.url}
                   alt={character.character}
@@ -75,7 +83,7 @@ export default function CharacterSection({
                 />
               )}
               {/* 画像がない場合のフォールバック */}
-              {!character.image && (
+              {!character.character_sprite && !character.image && (
                 <div className="aspect-[3/4] bg-gradient-to-b from-gray-700 to-gray-900 rounded-t-lg mb-4 flex items-center justify-center text-6xl">
                   {getElementIcon(character.elements)}
                 </div>

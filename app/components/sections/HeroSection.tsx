@@ -39,7 +39,16 @@ export default function HeroSection() {
     <section
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      style={{
+        backgroundImage: "url(/top_image.png)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
     >
+      {/* 背景オーバーレイ */}
+      <div className="absolute inset-0 bg-black/40"></div>
+
       {/* 背景パーティクル */}
       <div className="absolute inset-0">
         {particles.map((particle) => (

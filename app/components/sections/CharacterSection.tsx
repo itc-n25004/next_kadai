@@ -1,3 +1,6 @@
+"use client";
+
+import Link from "next/link";
 import { Character } from "@/lib/microcms";
 import { getImageUrl } from "@/lib/utils";
 
@@ -49,6 +52,12 @@ type CharacterSectionProps = {
 export default function CharacterSection({
   characters,
 }: CharacterSectionProps) {
+  // デバッグ用ログ
+  console.log("📋 CharacterSection受け取ったデータ:", {
+    キャラクター数: characters.length,
+    最初のキャラクター: characters[0],
+  });
+
   return (
     <section id="characters" className="py-20 px-4">
       <div className="container mx-auto">
@@ -62,47 +71,58 @@ export default function CharacterSection({
 
         {/* キャラクターカードのグリッド */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {characters.map((character) => (
-            <div
-              key={character.id}
-              className={`bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 transition-all duration-300 ${getCharacterCardClass(character.elements)} cursor-pointer transform hover:scale-105`}
-            >
-              {/* キャラクター画像 */}
-              {getImageUrl(character.character_sprite) && (
-                <img
-                  src={getImageUrl(character.character_sprite)}
-                  alt={character.character}
-                  className="aspect-[3/4] object-cover rounded-t-lg mb-4"
-                />
-              )}
-              {/* キャラクター通常画像 */}
-              {!getImageUrl(character.character_sprite) &&
-                getImageUrl(character.image) && (
+          {characters.map((character) => {
+            const href = `/characters/${character.id}`;
+            console.log("🎴 キャラクターカード生成:", {
+              id: character.id,
+              name: character.character,
+              href: href,
+            });
+            return (
+              <Link
+                key={character.id}
+                href={href}
+                className={`bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 transition-all duration-300 ${getCharacterCardClass(character.elements)} cursor-pointer transform hover:scale-105 block`}
+              >
+                {/* キャラクター画像 */}
+                {getImageUrl(character.character_sprite) && (
                   <img
-                    src={getImageUrl(character.image)}
+                    src={getImageUrl(character.character_sprite)}
                     alt={character.character}
-                    className="aspect-[3/4] object-cover rounded-t-lg mb-4"
+                    className="aspect-[3/4] object-cover rounded-t-lg mb-4 pointer-events-none"
                   />
                 )}
-              {/* 画像がない場合のフォールバック */}
-              {!getImageUrl(character.character_sprite) &&
-                !getImageUrl(character.image) && (
-                  <div className="aspect-[3/4] bg-gradient-to-b from-gray-700 to-gray-900 rounded-t-lg mb-4 flex items-center justify-center text-6xl">
-                    {getElementIcon(character.elements)}
-                  </div>
-                )}
-              {/* キャラクター情報 */}
-              <h3 className="text-2xl font-bold text-white mb-2">
-                {character.character}
-              </h3>
-              <p className="text-yellow-400 mb-2">{character.elements} 元素</p>
-              <p className="text-gray-400 text-sm">
-                {typeof character.country === "string"
-                  ? character.country
-                  : character.country.title}
-              </p>
-            </div>
-          ))}
+                {/* キャラクター通常画像 */}
+                {!getImageUrl(character.character_sprite) &&
+                  getImageUrl(character.image) && (
+                    <img
+                      src={getImageUrl(character.image)}
+                      alt={character.character}
+                      className="aspect-[3/4] object-cover rounded-t-lg mb-4 pointer-events-none"
+                    />
+                  )}
+                {/* 画像がない場合のフォールバック */}
+                {!getImageUrl(character.character_sprite) &&
+                  !getImageUrl(character.image) && (
+                    <div className="aspect-[3/4] bg-gradient-to-b from-gray-700 to-gray-900 rounded-t-lg mb-4 flex items-center justify-center text-6xl">
+                      {getElementIcon(character.elements)}
+                    </div>
+                  )}
+                {/* キャラクター情報 */}
+                <h3 className="text-2xl font-bold text-white mb-2">
+                  {character.character}
+                </h3>
+                <p className="text-yellow-400 mb-2">
+                  {character.elements} 元素
+                </p>
+                <p className="text-gray-400 text-sm">
+                  {typeof character.country === "string"
+                    ? character.country
+                    : character.country.title}
+                </p>
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

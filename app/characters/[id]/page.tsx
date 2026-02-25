@@ -56,6 +56,17 @@ const getCharacterId = (character: Character): string => {
   return String(rawId ?? "");
 };
 
+/**
+ * 静的パスを生成（ビルド時に全キャラクターページを生成）
+ */
+export async function generateStaticParams() {
+  const characters = await getCharacters();
+
+  return characters.map((character) => ({
+    id: character.id,
+  }));
+}
+
 export default async function CharacterDetailPage({
   params,
 }: CharacterDetailPageProps) {

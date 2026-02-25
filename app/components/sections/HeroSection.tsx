@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Button from "../ui/Button";
 
 /**
@@ -39,18 +40,24 @@ export default function HeroSection() {
     <section
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{
-        backgroundImage: "url(/top_image.png)",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-      }}
     >
+      {/* 背景画像 */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/top_image.png"
+          alt="Hero Background"
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
+      </div>
+
       {/* 背景オーバーレイ */}
-      <div className="absolute inset-0 bg-black/40"></div>
+      <div className="absolute inset-0 bg-black/40 z-10"></div>
 
       {/* 背景パーティクル */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 z-20">
         {particles.map((particle) => (
           <div
             key={particle.id}
@@ -65,7 +72,7 @@ export default function HeroSection() {
       </div>
 
       {/* メインコンテンツ */}
-      <div className="relative z-10 text-center px-4 animate-fade-in">
+      <div className="relative z-30 text-center px-4 animate-fade-in">
         <h1 className="text-6xl md:text-8xl font-bold text-white mb-6 animate-slide-up">
           原神学園
         </h1>
@@ -89,7 +96,7 @@ export default function HeroSection() {
       </div>
 
       {/* スクロールインジケーター */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-30">
         <svg
           className="w-6 h-6 text-white"
           fill="none"

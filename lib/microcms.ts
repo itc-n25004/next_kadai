@@ -12,20 +12,21 @@ type MicroCMSBase = {
 };
 
 /**
+ * microCMS 画像フィールドの型
+ */
+export type MicroCMSImage = {
+  url: string;
+  height: number;
+  width: number;
+};
+
+/**
  * 国型定義（microCMSスキーマに対応）
  */
 export type Country = MicroCMSBase & {
   title: string;
-  co_image?: {
-    url: string;
-    height: number;
-    width: number;
-  };
-  ac_image?: {
-    url: string;
-    height: number;
-    width: number;
-  };
+  co_image?: MicroCMSImage | string; // 国旗画像URL
+  ac_image?: MicroCMSImage | string; // 学園画像URL
   discription?: string;
 };
 
@@ -35,17 +36,15 @@ export type Country = MicroCMSBase & {
 export type Character = MicroCMSBase & {
   character: string;
   elements: string;
-  country: string; // 国はIDのみの文字列か、国オブジェクトのどちらか
-  image: {
-    url: string;
-    height: number;
-    width: number;
-  };
-  character_sprite?: {
-    url: string;
-    height: number;
-    width: number;
-  };
+  country: string | Country; // 国はID文字列か、国オブジェクト
+  image?: MicroCMSImage | string; // 画像URL
+  character_sprite?: MicroCMSImage | string; // キャラクター画像URL
+  discription?: string; // キャラクターの説明
+  episode?: string; // エピソード
+  comment?: string; // コメント
+  class?: string; // クラス
+  club?: string; // 所属部活
+  grade?: number; // 学年
 };
 
 /**
@@ -58,11 +57,7 @@ export type NewsItem = MicroCMSBase & {
   discription?: string;
   type?: string;
   icon?: string;
-  image?: {
-    url: string;
-    height: number;
-    width: number;
-  };
+  image?: MicroCMSImage;
 };
 
 /**
@@ -111,6 +106,18 @@ export const client = createClient({
 });
 
 /**
+ * 純粋関数: 画像URLを取り出す
+ */
+export const getImageUrl = (
+  image?: MicroCMSImage | string,
+): string | undefined => {
+  if (!image) {
+    return undefined;
+  }
+  return typeof image === "string" ? image : image.url;
+};
+
+/**
  * 国一覧を取得
  * @returns {Promise<Country[]>} 国配列
  */
@@ -124,8 +131,8 @@ export const getCountries = async (): Promise<Country[]> => {
       const sample = data.contents[0];
       console.log("📦 国データサンプル:", {
         title: sample.title,
-        co_image: sample.co_image?.url,
-        ac_image: sample.ac_image?.url,
+        co_image: sample.co_image,
+        ac_image: sample.ac_image,
         discription: sample.discription,
       });
     }
@@ -149,16 +156,56 @@ export const getCharacters = async (): Promise<Character[]> => {
       },
     });
     console.log("✅ キャラクターデータ取得成功:", data.contents.length, "件");
+
+    // 全データを出力（デバッグ用）
+    console.log(
+      "📋 全キャラクターデータ:",
+      JSON.stringify(data.contents, null, 2),
+    );
+
     if (data.contents[0]) {
       const sample = data.contents[0];
       console.log("📦 キャラクターデータサンプル:", {
         character: sample.character,
         elements: sample.elements,
         country: sample.country,
-        image: sample.image?.url,
-        character_sprite: sample.character_sprite?.url,
+        image: sample.image,
+        character_sprite: sample.character_sprite,
+        discription: sample.discription,
+        episode: sample.episode,
+        comment: sample.comment,
+        class: sample.class,
+        club: sample.club,
       });
+      console.log("🔍 サンプル全体:", sample);
     }
+    // 全キャラクターの詳細フィールドの有無をチェック
+    console.log("📊 詳細フィールド統計:");
+    console.log(
+      "  - discription あり:",
+      data.contents.filter((c) => c.discription).length,
+      "件",
+    );
+    console.log(
+      "  - episode あり:",
+      data.contents.filter((c) => c.episode).length,
+      "件",
+    );
+    console.log(
+      "  - comment あり:",
+      data.contents.filter((c) => c.comment).length,
+      "件",
+    );
+    console.log(
+      "  - class あり:",
+      data.contents.filter((c) => c.class).length,
+      "件",
+    );
+    console.log(
+      "  - club あり:",
+      data.contents.filter((c) => c.club).length,
+      "件",
+    );
     return data.contents;
   } catch (error) {
     console.log("❌ キャラクターデータを取得できませんでした:", error);

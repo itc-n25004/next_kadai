@@ -1,8 +1,10 @@
+import Link from "next/link";
 import {
   Character,
   Country,
   getCharacters,
   getCountries,
+  getImageUrl,
 } from "@/lib/microcms";
 import { COUNTRY_ORDER } from "@/lib/constants";
 import Header from "../components/layout/Header";
@@ -52,6 +54,21 @@ const getElementIcon = (elements: string): string => {
 };
 
 /**
+ * 純粋関数: 国参照からキーを取り出す
+ */
+const getCountryKey = (country: Character["country"]): string => {
+  if (!country) {
+    return "";
+  }
+
+  if (typeof country === "string") {
+    return country.trim();
+  }
+
+  return (country.id || country.title || "").trim();
+};
+
+/**
  * 純粋関数: キャラクターを国ごとにグループ化
  * 国情報が存在するキャラクターのみをグループ化
  */
@@ -79,37 +96,48 @@ const groupCharactersByCountry = (
  * キャラクターページ
  */
 export default async function CharactersPage() {
+  console.log("🔍 キャラクターページ読み込み開始");
+
   const [characters, countries] = await Promise.all([
     getCharacters(),
     getCountries(),
   ]);
 
+  console.log("✅ データ取得成功");
+  console.log("📊 取得したキャラクター数:", characters.length);
+  console.log("📊 取得した国数:", countries.length);
+
+  // キャラクターのIDを確認
+  console.log("📋 キャラクターIDリスト:");
+  characters.slice(0, 3).forEach((c) => {
+    console.log(`  - ${c.character}: id="${c.id}" (type: ${typeof c.id})`);
+    console.log(`    full object:`, c);
+  });
+
   // 国情報をマップ化（titleをキーにする）
-  const countryMap = new Map(countries.map((c) => [c.title.trim(), c]));
+  const countryMapById = new Map(countries.map((c) => [c.id, c]));
+  const countryMapByTitle = new Map(countries.map((c) => [c.title.trim(), c]));
 
   // キャラクターに国情報を統合
   const charactersWithCountry: CharacterWithCountry[] = characters.map(
-    (character) => ({
-      ...character,
-      countryInfo: countryMap.get(
-        (character.country as string)?.trim?.() || "",
-      ),
-    }),
+    (character) => {
+      const countryKey = getCountryKey(character.country);
+      return {
+        ...character,
+        countryInfo:
+          countryMapById.get(countryKey) ?? countryMapByTitle.get(countryKey),
+      };
+    },
   );
 
   const groupedCharacters = groupCharactersByCountry(charactersWithCountry);
 
-  // デバッグ情報
-  console.log("📊 取得したキャラクター数:", characters.length);
-  console.log("📊 取得した国数:", countries.length);
-  console.log(
-    "📊 国のタイトル一覧:",
-    countries.map((c) => c.title),
-  );
+  console.log("📊 グループ化された国:", Array.from(groupedCharacters.keys()));
   console.log(
     "📊 キャラクターの国情報:",
     characters.map((c) => ({ name: c.character, country: c.country })),
   );
+
   console.log("📊 グループ化された国:", Array.from(groupedCharacters.keys()));
   console.log(
     "📊 各国のキャラクター数:",
@@ -159,7 +187,7 @@ export default async function CharactersPage() {
                           {countryInfo.co_image && (
                             <div className="country-emblem">
                               <img
-                                src={countryInfo.co_image.url}
+                                src={getImageUrl(countryInfo.co_image)}
                                 alt={countryInfo.title}
                                 className="w-24 h-24 object-cover rounded-lg shadow-lg"
                               />
@@ -172,23 +200,32 @@ export default async function CharactersPage() {
 
                         <div className="characters-grid">
                           {countryCharacters.map((character, index) => (
-                            <ScrollReveal
+                            <Link
                               key={character.id}
-                              delay={index * 0.05}
+                              href={`/characters/${character.id}`}
+                              className="block"
                             >
                               <Card
-                                className={`character-card ${getCharacterCardClass(character.elements)}`}
+                                className={`character-card ${getCharacterCardClass(character.elements)} cursor-pointer hover:shadow-2xl transition-shadow duration-300`}
                               >
                                 <div className="character-image">
-                                  {character.character_sprite ? (
+                                  {getImageUrl(character.character_sprite) ? (
                                     <img
-                                      src={character.character_sprite.url}
+                                      src={getImageUrl(
+                                        character.character_sprite,
+                                      )}
                                       alt={character.character}
+                                      width={300}
+                                      height={400}
+                                      className="w-full h-full object-cover rounded-t-lg"
                                     />
-                                  ) : character.image ? (
+                                  ) : getImageUrl(character.image) ? (
                                     <img
-                                      src={character.image.url}
+                                      src={getImageUrl(character.image)}
                                       alt={character.character}
+                                      width={300}
+                                      height={400}
+                                      className="w-full h-full object-cover rounded-t-lg"
                                     />
                                   ) : (
                                     getElementIcon(character.elements)
@@ -200,8 +237,22 @@ export default async function CharactersPage() {
                                 <p className="character-element">
                                   {character.elements} 元素
                                 </p>
+
+                                {/* シンプル情報表示 */}
+                                <div className="character-simple-info mt-4 space-y-2 text-sm">
+                                  {character.class && (
+                                    <div>
+                                      <span className="text-white/60">
+                                        クラス:
+                                      </span>
+                                      <span className="text-white ml-2">
+                                        {character.class}
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
                               </Card>
-                            </ScrollReveal>
+                            </Link>
                           ))}
                         </div>
                       </section>

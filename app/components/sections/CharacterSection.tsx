@@ -1,4 +1,4 @@
-import { Character } from "@/lib/microcms";
+import { Character, getImageUrl } from "@/lib/microcms";
 
 /**
  * 純粋関数: 元素に応じたボーダーカラーのクラス名を生成
@@ -67,33 +67,39 @@ export default function CharacterSection({
               className={`bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 transition-all duration-300 ${getCharacterCardClass(character.elements)} cursor-pointer transform hover:scale-105`}
             >
               {/* キャラクター画像 */}
-              {character.character_sprite && (
+              {getImageUrl(character.character_sprite) && (
                 <img
-                  src={character.character_sprite.url}
+                  src={getImageUrl(character.character_sprite)}
                   alt={character.character}
                   className="aspect-[3/4] object-cover rounded-t-lg mb-4"
                 />
               )}
               {/* キャラクター通常画像 */}
-              {!character.character_sprite && character.image && (
-                <img
-                  src={character.image.url}
-                  alt={character.character}
-                  className="aspect-[3/4] object-cover rounded-t-lg mb-4"
-                />
-              )}
+              {!getImageUrl(character.character_sprite) &&
+                getImageUrl(character.image) && (
+                  <img
+                    src={getImageUrl(character.image)}
+                    alt={character.character}
+                    className="aspect-[3/4] object-cover rounded-t-lg mb-4"
+                  />
+                )}
               {/* 画像がない場合のフォールバック */}
-              {!character.character_sprite && !character.image && (
-                <div className="aspect-[3/4] bg-gradient-to-b from-gray-700 to-gray-900 rounded-t-lg mb-4 flex items-center justify-center text-6xl">
-                  {getElementIcon(character.elements)}
-                </div>
-              )}
+              {!getImageUrl(character.character_sprite) &&
+                !getImageUrl(character.image) && (
+                  <div className="aspect-[3/4] bg-gradient-to-b from-gray-700 to-gray-900 rounded-t-lg mb-4 flex items-center justify-center text-6xl">
+                    {getElementIcon(character.elements)}
+                  </div>
+                )}
               {/* キャラクター情報 */}
               <h3 className="text-2xl font-bold text-white mb-2">
                 {character.character}
               </h3>
               <p className="text-yellow-400 mb-2">{character.elements} 元素</p>
-              <p className="text-gray-400 text-sm">{character.country}</p>
+              <p className="text-gray-400 text-sm">
+                {typeof character.country === "string"
+                  ? character.country
+                  : character.country.title}
+              </p>
             </div>
           ))}
         </div>

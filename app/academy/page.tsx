@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { COUNTRY_ORDER } from "@/lib/constants";
-import { getCountries, type Country } from "@/lib/microcms";
+import { getCountries, type Country, getImageUrl } from "@/lib/microcms";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import ScrollReveal from "../components/ui/ScrollReveal";
@@ -62,8 +62,8 @@ export default async function AcademyPage() {
               key={country.id}
               className={`school-section${country.ac_image ? " has-image" : ""}`}
               style={
-                country.ac_image
-                  ? { backgroundImage: `url(${country.ac_image.url})` }
+                getImageUrl(country.ac_image)
+                  ? { backgroundImage: `url(${getImageUrl(country.ac_image)})` }
                   : undefined
               }
             >
@@ -78,7 +78,7 @@ export default async function AcademyPage() {
                   {country.co_image && (
                     <div className="school-emblem">
                       <img
-                        src={country.co_image.url}
+                        src={getImageUrl(country.co_image)}
                         alt={country.title}
                         className="school-emblem-image"
                       />

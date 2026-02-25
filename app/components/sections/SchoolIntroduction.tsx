@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Country } from "@/lib/microcms";
+import { Country, getImageUrl } from "@/lib/microcms";
 import { COUNTRY_ORDER } from "@/lib/constants";
 import ScrollReveal from "../ui/ScrollReveal";
 
@@ -44,10 +44,10 @@ export default function SchoolIntroduction({
                       href="/academy"
                       className="block bg-white/10 backdrop-blur-sm rounded-xl overflow-hidden hover:scale-105 transition-transform duration-300 flex flex-col h-full"
                     >
-                      {country.co_image && (
+                      {getImageUrl(country.co_image) && (
                         <div className="relative overflow-hidden flex-1">
                           <img
-                            src={country.co_image.url}
+                            src={getImageUrl(country.co_image)}
                             alt={country.title}
                             className="w-full h-full object-cover"
                           />

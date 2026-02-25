@@ -5,17 +5,11 @@ import CharacterSection from "./components/sections/CharacterSection";
 import NewsSection from "./components/sections/NewsSection";
 import SchoolIntroduction from "./components/sections/SchoolIntroduction";
 import CommunitySection from "./components/sections/CommunitySection";
-import {
-  getCharacters,
-  getNews,
-  getSocialLinks,
-  getCountries,
-} from "@/lib/microcms";
+import { getCharacters, getNews, getCountries } from "@/lib/microcms";
 
 export default async function Home() {
   const characters = await getCharacters();
   const news = await getNews();
-  const socialLinks = await getSocialLinks();
   const countries = await getCountries();
 
   return (
@@ -25,7 +19,7 @@ export default async function Home() {
       <CharacterSection characters={characters} />
       <NewsSection news={news} />
       <SchoolIntroduction countries={countries} />
-      <CommunitySection socialLinks={socialLinks} />
+      <CommunitySection socialLinks={[]} />
       <Footer />
     </main>
   );

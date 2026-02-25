@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { Country, getImageUrl } from "@/lib/microcms";
+import { Country } from "@/lib/microcms";
+import { getImageUrl } from "@/lib/utils";
 import { COUNTRY_ORDER } from "@/lib/constants";
 import ScrollReveal from "../ui/ScrollReveal";
 

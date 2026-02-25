@@ -1,4 +1,3 @@
-import { getSocialLinks } from "@/lib/microcms";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import ScrollReveal from "../components/ui/ScrollReveal";
@@ -10,7 +9,7 @@ import "./styles.css";
  * コミュニティページ
  */
 export default async function CommunityPage() {
-  const socialLinks = await getSocialLinks();
+  const socialLinks: any[] = [];
 
   return (
     <div className="community-page">

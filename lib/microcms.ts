@@ -1,4 +1,5 @@
 import { createClient } from "microcms-js-sdk";
+import { getImageUrl as getImageUrlUtil, type MicroCMSImage } from "./utils";
 
 /**
  * microCMS API レスポンスの基本型
@@ -12,13 +13,10 @@ type MicroCMSBase = {
 };
 
 /**
- * microCMS 画像フィールドの型
+ * 純粋関数: 画像URLを取り出す（再エクスポート）
  */
-export type MicroCMSImage = {
-  url: string;
-  height: number;
-  width: number;
-};
+export const getImageUrl = getImageUrlUtil;
+export type { MicroCMSImage };
 
 /**
  * 国型定義（microCMSスキーマに対応）
@@ -88,34 +86,24 @@ type MicroCMSListResponse<T> = {
   limit: number;
 };
 
-// 環境変数チェック
-if (!process.env.MICROCMS_SERVICE_DOMAIN) {
-  throw new Error("MICROCMS_SERVICE_DOMAIN is required");
-}
+// 環境変数チェック（サーバーサイドのみ）
+if (typeof window === "undefined") {
+  if (!process.env.MICROCMS_SERVICE_DOMAIN) {
+    throw new Error("MICROCMS_SERVICE_DOMAIN is required");
+  }
 
-if (!process.env.MICROCMS_API_KEY) {
-  throw new Error("MICROCMS_API_KEY is required");
+  if (!process.env.MICROCMS_API_KEY) {
+    throw new Error("MICROCMS_API_KEY is required");
+  }
 }
 
 /**
  * microCMSクライアントのインスタンス
  */
 export const client = createClient({
-  serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN,
-  apiKey: process.env.MICROCMS_API_KEY,
+  serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN || "",
+  apiKey: process.env.MICROCMS_API_KEY || "",
 });
-
-/**
- * 純粋関数: 画像URLを取り出す
- */
-export const getImageUrl = (
-  image?: MicroCMSImage | string,
-): string | undefined => {
-  if (!image) {
-    return undefined;
-  }
-  return typeof image === "string" ? image : image.url;
-};
 
 /**
  * 国一覧を取得

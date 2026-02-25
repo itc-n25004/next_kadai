@@ -1,4 +1,5 @@
-import { Character, getImageUrl } from "@/lib/microcms";
+import { Character } from "@/lib/microcms";
+import { getImageUrl } from "@/lib/utils";
 
 /**
  * 純粋関数: 元素に応じたボーダーカラーのクラス名を生成
